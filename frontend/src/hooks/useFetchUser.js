@@ -22,7 +22,7 @@ const useFetchUser = () => {
       dispatch(setAuthUser(response.data.authUser));
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
-      console.log(err.response?.data?.message)
+      
       
     } finally {
       setLoading(false);
