@@ -9,6 +9,7 @@ const AddTaskPopup = ({ onClose }) => {
   const [priority, setPriority] = useState("Medium");
   const [isOutdoor, setIsOutdoor] = useState(false);
   const [loading, setLoading] = useState(false);
+  const task = useSelector()
   
 
   const handleSubmit = async () => {
@@ -16,8 +17,9 @@ const AddTaskPopup = ({ onClose }) => {
 
     setLoading(true);
     try {
-      await axios.post("https://localhost:3000/api/tasks", { title, description, priority, isOutdoor },{withCredentials:true});
+     const response = await axios.post("https://localhost:3000/api/tasks/create", { title, description, priority, isOutdoor },{withCredentials:true});
       onClose(); 
+
 
     } catch (error) {
       console.error("Error adding task:", error);
