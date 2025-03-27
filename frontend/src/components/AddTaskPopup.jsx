@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setTasks } from "../redux/taskSlice";
 
 const AddTaskPopup = ({ onClose }) => {
   const [title, setTitle] = useState("");
@@ -9,7 +9,8 @@ const AddTaskPopup = ({ onClose }) => {
   const [priority, setPriority] = useState("Medium");
   const [isOutdoor, setIsOutdoor] = useState(false);
   const [loading, setLoading] = useState(false);
-  const task = useSelector()
+  const {tasks} = useSelector(store => store.tasks)
+  const dispatch = useDispatch()
   
 
   const handleSubmit = async () => {
@@ -17,9 +18,12 @@ const AddTaskPopup = ({ onClose }) => {
 
     setLoading(true);
     try {
-     const response = await axios.post("https://localhost:3000/api/tasks/create", { title, description, priority, isOutdoor },{withCredentials:true});
+      const response = await axios.post("http://localhost:3000/api/tasks/create", { title, description, priority, isOutdoor },{
+        withCredentials:true,
+      });
+      console.log(response?.data);
+      dispatch(setTasks([...tasks, response?.data]))
       onClose(); 
-
 
     } catch (error) {
       console.error("Error adding task:", error);
@@ -30,8 +34,8 @@ const AddTaskPopup = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg animate-fadeIn">
+    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)] backdrop-blur-sm p-4"onClick={onClose}>
+      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg animate-fadeIn" onClick={(e)=>e.stopPropagation()}>
         <h2 className="text-xl font-bold mb-3">Add New Task</h2>
         <input
           type="text"

@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import AddTaskPopup from "../components/AddTaskPopup.jsx";
 import useFetchTasks from "../hooks/useFetchTasks.js";
+import ViewTaskPopup from "../components/ViewTaskPopup.jsx";
+import TaskCard from "../components/taskCard.jsx";
 
 const Home = () => {
   const [showAddTask, setShowAddTask] = useState(false);
+  
   const { tasks, loading, error } = useFetchTasks();
   const username = useSelector((state) => state.auth.user.username);
 
@@ -23,22 +26,8 @@ const Home = () => {
         <h2 className="text-xl font-bold mb-4">Your Tasks</h2>
 
         <ul className="space-y-3">
-          {tasks.map((task) => (
-            <li
-              key={task._id}
-              className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center"
-            >
-              <div>
-                <h3 className="text-lg font-semibold">{task.title}</h3>
-                <p className="text-sm text-gray-500">Priority: {task.priority}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`text-lg ${task.completed ? "text-green-500" : "text-gray-400"}`}>
-                  {task.completed ? "✅" : "⬜"}
-                </span>
-                <button className="text-blue-600 underline text-sm">View</button>
-              </div>
-            </li>
+          {tasks?.map((task) => (
+            <TaskCard task={task}/>
           ))}
         </ul>
       </div>
@@ -52,6 +41,7 @@ const Home = () => {
       </button>
 
       {showAddTask && <AddTaskPopup onClose={() => setShowAddTask(false)} />}
+      
     </div>
   );
 };

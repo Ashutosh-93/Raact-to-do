@@ -17,13 +17,12 @@ const useFetchUser = () => {
         email,
         password,
       },{withCredentials:true});
-
-      
       dispatch(setAuthUser(response.data.authUser));
+      return true;
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
       
-      
+      return false
     } finally {
       setLoading(false);
     }
